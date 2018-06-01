@@ -10,7 +10,7 @@ client.login(token);
 
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    const args = message.content.slice(prefix.length).split(' ');
+    const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
     if (command === 'ping') {
@@ -38,5 +38,9 @@ client.on('message', message => {
         }
 
         message.channel.send(`First argument: ${args[0]}`);
+    }
+    else if (command === 'punch ') {
+        const taggedUser = message.mentions.users.first();
+        message.channel.send(`You punched ${taggedUser.username} 👊👊👊`);
     }
 });

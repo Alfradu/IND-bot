@@ -39,7 +39,7 @@ client.on('message', message => {
 
         message.channel.send(`First argument: ${args[0]}`);
     }
-    else if (command === 'punch ') {
+    else if (command === 'punch') {
         const taggedUser = message.mentions.users.first();
         message.channel.send(`You punched ${taggedUser.username} 👊👊👊`);
     }

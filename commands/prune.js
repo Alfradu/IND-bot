@@ -1,6 +1,10 @@
 module.exports = {
     name: 'prune',
     description: 'Remove 1-99 previous messages',
+    cooldown: 5,
+    guildOnly: true,
+    args: true,
+    usage: '<number between 1-99>',
     execute(message, args) {
         const amount = parseInt(args[0]);
         if (isNaN(amount)) {
@@ -11,7 +15,7 @@ module.exports = {
         }
         message.channel.bulkDelete(amount + 1, true).catch(err => {
             console.error(err);
-            message.channel.send('There was an  error trying to prune messages in this  channel!');
+            message.channel.send('There was an error trying to prune messages in this channel!');
         });
     },
 };

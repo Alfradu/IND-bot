@@ -6,8 +6,6 @@ client.on('ready', () => {
     console.log('Ready!');
 });
 
-client.login(token);
-
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -41,9 +39,33 @@ client.on('message', message => {
     }
     else if (command === 'punch') {
         if (!message.mentions.users.size) {
-            return message.reply('you need to tag a user in order to punch them!');
+            return message.channel.send('You hit yourself out of confusion 👊👊👊');
         }
         const taggedUser = message.mentions.users.first();
         message.channel.send(`You punched ${taggedUser.username} 👊👊👊`);
     }
+    else if (command === 'avatar') {
+        if (!message.mentions.users.size) {
+            return message.channel.send(`Your avatar: ${message.author.displayAvatarURL}`);
+        }
+        const avatarList = message.mentions.users.map(user => {
+            return `${user.username}'s avatar: ${user.displayAvatarURL}`;
+        });
+
+        message.channel.send(avatarList);
+    }
+    else if (command === 'prune') {
+        const amount = parseInt(args[0]);
+        if (isNaN(amount)) {
+            return message.reply('that doesn\'t seem to be a valid number.');
+        }
+        else if (amount < 1 || amount > 99) {
+            return message.reply('you need to input a number between 1 and 99.');
+        }
+        message.channel.bulkDelete(amount + 1, true).catch(err => {
+            console.error(err);
+            message.channel.send('There was an  error trying to prune messages in this  channel!');
+        });
+    }
 });
+client.login(token);

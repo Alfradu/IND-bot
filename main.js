@@ -40,6 +40,9 @@ client.on('message', message => {
         message.channel.send(`First argument: ${args[0]}`);
     }
     else if (command === 'punch') {
+        if (!message.mentions.users.size) {
+            return message.reply('you need to tag a user in order to punch them!');
+        }
         const taggedUser = message.mentions.users.first();
         message.channel.send(`You punched ${taggedUser.username} 👊👊👊`);
     }

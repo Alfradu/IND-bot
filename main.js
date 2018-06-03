@@ -2,7 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 
-const client = new Discord.Client();
+const client = new Discord.Client({ autoReconnect: true });
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
@@ -14,6 +14,15 @@ for (const file of commandFiles) {
 
 client.on('ready', () => {
     console.log('Ready!');
+});
+
+client.on('error', (err) => {
+    client.channels.get('151048377440665601').send('Something went wrong, please check up on me!');
+    console.log(err);
+});
+
+client.on('disconnected', function() {
+    console.log('*** crashed, hoping autoReconnect saves me ._. ***');
 });
 
 client.on('message', message => {
@@ -69,4 +78,5 @@ client.on('message', message => {
         message.reply('There was an error trying to execute that command!');
     }
 });
+
 client.login(token);

@@ -3,6 +3,7 @@ module.exports = {
     description: 'Remove 1-99 previous messages',
     cooldown: 5,
     guildOnly: true,
+    modOnly: true,
     args: true,
     usage: '<number between 1-99>',
     execute(message, args) {

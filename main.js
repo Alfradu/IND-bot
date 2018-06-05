@@ -21,11 +21,12 @@ client.on('error', (err) => {
     console.log(err);
 });
 
-client.on('disconnected', function() {
+client.on('disconnected', () => {
     console.log('*** crashed, hoping autoReconnect saves me ._. ***');
 });
 
 client.on('message', message => {
+
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
@@ -38,6 +39,13 @@ client.on('message', message => {
     if (command.guildOnly && message.channel.type !== 'text') {
         return message.reply('I can\'t execute that command inside DMs!');
     }
+
+//  check if admin or not
+//  BE CAREFUL SO YOU ADD MODONLY ONLY WHERE YOU HAVE GUILDONLY TAGS
+    if (command.modOnly == 'administrator' && !message.member.permissions.has('ADMINISTRATOR')) {
+        return message.channel.send(`I can't let you do that, ${message.author}`);
+    }
+
 //  check if args: true and if args are provided
     if (command.args && !args.length) {
         let reply = `You didn't provide any arguments, ${message.author}!`;

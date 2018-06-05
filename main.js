@@ -38,7 +38,7 @@ feeder.add({
 });
 
 feeder.on('new-item', (item) => {
-    const chan = client.channels.get('284694444907692032');
+    const chan = client.channels.get('135797216563560448');
     if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
         chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
     }

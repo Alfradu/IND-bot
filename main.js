@@ -40,14 +40,10 @@ feeder.add({
 feeder.on('new-item', (item) => {
     const chan = client.channels.get('453672157277585408');
     if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
-        //  chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
-        console.log(item);
-        console.log('found free humblebundle game');
+        chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
     }
     else if (!item.link.includes('blog.humblebundle.com') && (item.description.includes(' FREE ') || item.description.includes(' free '))) {
-        //  chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
-        console.log(item);
-        console.log('found free game outside of humblebundle');
+        chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
     }
 });
 

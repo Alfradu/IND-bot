@@ -19,9 +19,8 @@ client.on('ready', () => {
     console.log('Ready!');
 });
 
-client.on('error', (err) => {
-    client.channels.get('151048377440665601').send('Something went wrong, please check up on me!');
-    console.log(err);
+client.on('error', err => {
+    console.log(err.message);
 });
 
 client.on('disconnected', () => {
@@ -37,7 +36,7 @@ feeder.add({
     refresh: 2000,
 });
 
-feeder.on('new-item', (item) => {
+feeder.on('new-item', item => {
     const chan = client.channels.get('135797216563560448');
     if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
         chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);

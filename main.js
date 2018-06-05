@@ -6,6 +6,9 @@ const client = new Discord.Client({ autoReconnect: true });
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
+const RssFeedEmitter = require('rss-feed-emitter');
+const feeder = new RssFeedEmitter();
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -23,6 +26,29 @@ client.on('error', (err) => {
 
 client.on('disconnected', () => {
     console.log('*** crashed, hoping autoReconnect saves me ._. ***');
+});
+
+feeder.add({
+    url: 'http://blog.humblebundle.com/rss',
+    refresh: 2000,
+});
+feeder.add({
+    url: 'https://www.gog.com/frontpage/rss',
+    refresh: 2000,
+});
+
+feeder.on('new-item', (item) => {
+    const chan = client.channels.get('453672157277585408');
+    if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
+        //  chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
+        console.log(item);
+        console.log('found free humblebundle game');
+    }
+    else if (!item.link.includes('blog.humblebundle.com') && (item.description.includes(' FREE ') || item.description.includes(' free '))) {
+        //  chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
+        console.log(item);
+        console.log('found free game outside of humblebundle');
+    }
 });
 
 client.on('message', message => {

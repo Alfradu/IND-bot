@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.3.2"
+    "discord.js": "^11.3.2",
+    "rss-feed-emitter": "^2.0.0",
+    "sequelize": "^4.37.10"
   }
 }

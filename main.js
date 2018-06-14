@@ -35,14 +35,31 @@ feeder.add({
     url: 'https://www.gog.com/frontpage/rss',
     refresh: 2000,
 });
+feeder.add({
+    url: 'https://store.steampowered.com/feeds/news.xml',
+    refresh: 2000,
+});
 
 feeder.on('new-item', item => {
-    const chan = client.channels.get('135797216563560448');
-    if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
-        chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
-    }
-    else if (!item.link.includes('blog.humblebundle.com') && (item.description.includes(' FREE ') || item.description.includes(' free '))) {
-        chan.send(` **${item.title}**!\nVisit: ${item.permalink}`).catch(console.error);
+    const chan = client.channels.get('284694444907692032'); //  announcements channel
+    console.log(item);
+
+    if (item.date.valueOf() > Date.now() - 100000) {
+        console.log('item date checks out');
+        if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
+            const embed = {
+                'color': '#e67e22',
+            };
+            chan.send(` **${item.title}**!\nVisit: ${item.permalink}`, { embed }).catch(console.error);
+            console.log('item content checks out <HUMBLEBUNDLE>');
+        }
+        else if (!item.link.includes('blog.humblebundle.com') && item.description.toLowerCase().includes('free')) {
+            const embed = {
+                'color': '#e67e22',
+            };
+            chan.send(` **${item.title}**!\nVisit: ${item.permalink}`, { embed }).catch(console.error);
+            console.log('item title checks out <GOG OR STEAM>');
+        }
     }
 });
 

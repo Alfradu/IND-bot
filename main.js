@@ -16,7 +16,7 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', () => {
-    console.log('Ready!');
+    console.log('IND-Bot ready!');
 });
 
 client.on('error', err => {
@@ -42,23 +42,31 @@ feeder.add({
 
 feeder.on('new-item', item => {
     const chan = client.channels.get('284694444907692032'); //  announcements channel
-    console.log(item);
+    console.log(item.title);
 
-    if (item.date.valueOf() > Date.now() - 100000) {
-        console.log('item date checks out');
+    if (item.date.valueOf() > Date.now() - 86400000) {
+        console.log('-- item date checks out --');
         if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
             const embed = {
-                'color': '#e67e22',
+                'color': '15105570',
+                'fields': [{
+                    name: `${item.title}`,
+                    value: `Get it here: ${item.permalink}`,
+                }],
             };
-            chan.send(` **${item.title}**!\nVisit: ${item.permalink}`, { embed }).catch(console.error);
-            console.log('item content checks out <HUMBLEBUNDLE>');
+            chan.send({ embed }).catch(console.error);
+            console.log('-- item content checks out <HUMBLEBUNDLE> --');
         }
         else if (!item.link.includes('blog.humblebundle.com') && item.description.toLowerCase().includes('free')) {
             const embed = {
-                'color': '#e67e22',
+                'color': '15105570',
+                'fields': [{
+                    name: `${item.title}`,
+                    value: `Get it here: ${item.permalink}`,
+                }],
             };
-            chan.send(` **${item.title}**!\nVisit: ${item.permalink}`, { embed }).catch(console.error);
-            console.log('item title checks out <GOG OR STEAM>');
+            chan.send({ embed }).catch(console.error);
+            console.log('-- item title checks out <GOG OR STEAM> --');
         }
     }
 });

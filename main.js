@@ -42,9 +42,9 @@ feeder.add({
 
 feeder.on('new-item', item => {
     const chan = client.channels.get('284694444907692032'); //  announcements channel
-    console.log(item.title);
+    console.log(`${item.title} -- ${item.date}`);
 
-    if (item.date.valueOf() > Date.now() - 86400000) {
+    if (item.date.valueOf() > Date.now() - 1800000) {
         console.log('-- item date checks out --');
         if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
             const embed = {
@@ -62,7 +62,7 @@ feeder.on('new-item', item => {
                 'color': '15105570',
                 'fields': [{
                     name: `${item.title}`,
-                    value: `Get it here: ${item.permalink}`,
+                    value: `Get it here: ${item.link}`,
                 }],
             };
             chan.send({ embed }).catch(console.error);

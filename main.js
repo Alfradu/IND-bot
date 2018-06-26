@@ -76,7 +76,6 @@ feeder.on('new-item', item => {
 });
 
 client.on('message', message => {
-    console.log(`${client.user.lastMessage}`);
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();

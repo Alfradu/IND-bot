@@ -8,6 +8,7 @@ const cooldowns = new Discord.Collection();
 
 const RssFeedEmitter = require('rss-feed-emitter');
 const feeder = new RssFeedEmitter();
+var currentTitle = '';
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -24,6 +25,7 @@ client.on('error', err => {
 });
 
 client.on('disconnected', () => {
+    feeder.destroy();
     console.log('*** crashed, hoping autoReconnect saves me ._. ***');
 });
 
@@ -41,12 +43,13 @@ feeder.add({
 });
 
 feeder.on('new-item', item => {
+    
     const chan = client.channels.get('284694444907692032'); //  announcements channel
     console.log(`${item.title} -- ${item.date}`);
 
-    if (item.date.valueOf() > Date.now() - 1800000) {
-        console.log('-- item date checks out --');
-        if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game')) {
+    if (!item.title == currentTitle && item.date.valueOf() > Date.now() - 600000) {
+        console.log('-- item date and duplication checks out --');
+        if (item.link.includes('blog.humblebundle.com') && item.categories.includes('humble free game') && !item.categories.includes('humble monthly')) {
             const embed = {
                 'color': '15105570',
                 'fields': [{
@@ -57,7 +60,7 @@ feeder.on('new-item', item => {
             chan.send({ embed }).catch(console.error);
             console.log('-- item content checks out <HUMBLEBUNDLE> --');
         }
-        else if (!item.link.includes('blog.humblebundle.com') && item.description.toLowerCase().includes('free')) {
+        else if (!item.link.includes('blog.humblebundle.com') && item.description.toLowerCase().includes('free') && !item.description.toLowerCase().includes('demo')) {
             const embed = {
                 'color': '15105570',
                 'fields': [{
@@ -68,11 +71,12 @@ feeder.on('new-item', item => {
             chan.send({ embed }).catch(console.error);
             console.log('-- item title checks out <GOG OR STEAM> --');
         }
+        currentTitle = item.title;
     }
 });
 
 client.on('message', message => {
-
+    console.log(`${client.user.lastMessage}`);
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
